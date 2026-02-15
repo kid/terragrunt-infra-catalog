@@ -109,7 +109,7 @@ const hasChanges = () => {
   let lastTag = "";
   try {
     lastTag = execSync(
-      `git describe --tags --match "module-${moduleName}-v*" --abbrev=0`,
+      "git describe --tags --match \"module-${moduleName}-v*\" --abbrev=0",
       { encoding: "utf8" }
     ).trim();
   } catch (error) {
@@ -118,8 +118,8 @@ const hasChanges = () => {
 
   const range = lastTag ? `${lastTag}..HEAD` : "HEAD";
   const output = execSync(`git log ${range} -- ${modulePath}`, {
-    encoding: "utf8"
-  }).trim();
+    encoding: "utf8" }
+  ).trim();
 
   return output.length > 0;
 };
