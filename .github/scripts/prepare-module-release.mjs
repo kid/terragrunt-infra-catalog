@@ -216,7 +216,7 @@ if (!hasChanges()) {
 
 const result = await semanticRelease(config, {
   cwd: process.cwd(),
-  env: process.env,
+  env: { ...process.env, CI: "false" },
   stdout,
   stderr,
   dryRun: isDryRun
