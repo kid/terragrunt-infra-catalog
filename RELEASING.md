@@ -17,6 +17,8 @@ Breaking changes should use `!` in the header or a `BREAKING CHANGE:` footer.
 
 Commit linting runs on pull requests and requires a non-empty scope.
 
+StandardJS linting runs on pull requests for the CI scripts under `.github/`.
+
 ## Release preview
 
 Pull requests get a release preview comment per module. The preview uses a
