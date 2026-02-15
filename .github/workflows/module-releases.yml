@@ -29,6 +29,7 @@ jobs:
     if: ${{ needs.discover-modules.outputs.matrix != '' }}
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix: ${{ fromJson(needs.discover-modules.outputs.matrix) }}
     permissions:
       contents: write
