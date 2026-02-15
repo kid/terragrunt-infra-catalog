@@ -139,6 +139,8 @@ const config = JSON.parse(fs.readFileSync(configPath, "utf8"))
 const isDryRun = process.argv.includes("--dry-run")
 const logPath = path.resolve(".github", ".releases", "${moduleName}", "dry-run.log")
 const modulePath = path.join("modules", "${moduleName}")
+const unitPath = path.join("units", "${moduleName}")
+const sharedPath = path.join("modules", "_shared")
 
 if (isDryRun) {
   config.branches = ["*"]
@@ -176,17 +178,39 @@ const hasChanges = () => {
   let lastTag = ""
   try {
     lastTag = execSync(
-      "git describe --tags --match 'module-${moduleName}-v*' --abbrev=0",
+      "git describe --tags --match '${moduleName}-v*' --abbrev=0",
       { encoding: "utf8" }
     ).trim()
   } catch (error) {
     lastTag = ""
   }
 
+  if (!lastTag) {
+    return true
+  }
+
   const range = lastTag ? lastTag + "..HEAD" : "HEAD"
-  const output = execSync("git log " + range + " -- " + modulePath, {
-    encoding: "utf8"
-  }).trim()
+  const output = execSync(
+    "git log " +
+      range +
+      " -- " +
+      modulePath +
+      " " +
+      unitPath +
+      " " +
+      sharedPath,
+    {
+      encoding: "utf8"
+    }
+  ).trim()
+
+  return output.length > 0
+}
+
+if (!hasChanges()) {
+  console.log("No changes in " + modulePath + "; skipping release.")
+  process.exit(0)
+}
 
   return output.length > 0
 }
