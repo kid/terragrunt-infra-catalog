@@ -17,22 +17,16 @@ if (!fs.existsSync(logPath)) {
 const log = fs.readFileSync(logPath, 'utf8')
 const publishedMatch = log.match(/Published .* release (\d+\.\d+\.\d+)/)
 const notesMatch = log.match(/Release note for version .*?\n([\s\S]*)/)
-const reasonMatch = log.match(
-  /(This run was triggered by a pull request[^\n]*|No changes in [^\n]*|No release published[^\n]*)/
-)
+if (!publishedMatch) {
+  console.log(`No release for ${moduleName}.`)
+  process.exit(0)
+}
 
-const version = publishedMatch ? publishedMatch[1] : null
+const version = publishedMatch[1]
 const notes = notesMatch ? notesMatch[1].trim() : ''
-const statusLine = version
-  ? `Planned version: ${version}`
-  : 'No release planned.'
-const reasonLine = reasonMatch ? `Reason: ${reasonMatch[1]}` : ''
 const body = `## Release preview: ${moduleName}\n\n` +
-  `${statusLine}\n\n` +
-  (reasonLine ? `${reasonLine}\n\n` : '') +
-  (version
-    ? (notes ? `### Notes\n\n${notes}\n` : 'No release notes generated.')
-    : 'No release notes generated.')
+  `Planned version: ${version}\n\n` +
+  (notes ? `### Notes\n\n${notes}\n` : 'No release notes generated.')
 
 const prNumber = process.env.PR_NUMBER || process.env.GITHUB_REF_NAME?.split('/')[1]
 if (!prNumber) {

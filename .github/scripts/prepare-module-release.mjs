@@ -20,6 +20,8 @@ fs.mkdirSync(contextPath, { recursive: true })
 const releaseConfig = {
   branches: ['main'],
   tagFormat: `${moduleName}-v\${version}`,
+  dryRun: true,
+  ci: false,
   plugins: [
     [
       './.github/.releases/' + moduleName + '/filtered-commits.mjs',
