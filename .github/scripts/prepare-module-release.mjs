@@ -61,9 +61,10 @@ import { createRequire } from "module"
 const require = createRequire(import.meta.url)
 const commitAnalyzerModule = require("@semantic-release/commit-analyzer")
 const releaseNotesGeneratorModule = require("@semantic-release/release-notes-generator")
-const commitAnalyzer = commitAnalyzerModule.default || commitAnalyzerModule
+const commitAnalyzer =
+  commitAnalyzerModule.default || commitAnalyzerModule.analyzeCommits
 const releaseNotesGenerator =
-  releaseNotesGeneratorModule.default || releaseNotesGeneratorModule
+  releaseNotesGeneratorModule.default || releaseNotesGeneratorModule.generateNotes
 
 const listCommitFiles = (hash) => {
   if (!hash) {
