@@ -17,25 +17,17 @@ if (!fs.existsSync(moduleDir)) {
 const contextPath = path.join('.github', '.releases', moduleName)
 fs.mkdirSync(contextPath, { recursive: true })
 
-const escapeRegex = (value) =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-const moduleScope = escapeRegex(moduleName)
-const parserOpts = {
-  headerPattern: `^(\\w+)\\(${moduleScope}\\)(!)?: (.+)$`,
-  headerCorrespondence: ['type', 'scope', 'breaking', 'subject']
-}
-
 const releaseConfig = {
   branches: ['main'],
   tagFormat: `module-${moduleName}-v\${version}`,
   plugins: [
     [
-      '@semantic-release/commit-analyzer',
-      { preset: 'conventionalcommits', parserOpts }
-    ],
-    [
-      '@semantic-release/release-notes-generator',
-      { preset: 'conventionalcommits', parserOpts }
+      './.github/.releases/' + moduleName + '/filtered-commits.mjs',
+      {
+        modulePath: 'modules/' + moduleName,
+        analyzer: { preset: 'conventionalcommits' },
+        notes: { preset: 'conventionalcommits' }
+      }
     ],
     [
       '@semantic-release/changelog',
@@ -62,6 +54,62 @@ fs.writeFileSync(
 )
 
 const releaseIndexPath = path.join(contextPath, 'index.mjs')
+const filteredCommitsPath = path.join(contextPath, 'filtered-commits.mjs')
+const filteredCommitsPlugin = `import { execSync } from "child_process"
+import commitAnalyzer from "@semantic-release/commit-analyzer"
+import releaseNotesGenerator from "@semantic-release/release-notes-generator"
+
+const listCommitFiles = (hash) => {
+  if (!hash) {
+    return []
+  }
+
+  try {
+    const output = execSync(
+      "git diff-tree --no-commit-id --name-only -r " + hash,
+      { encoding: "utf8" }
+    )
+
+    return output
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+  } catch (error) {
+    return []
+  }
+}
+
+const filterCommitsByPath = (commits, modulePath) =>
+  commits.filter((commit) => {
+    const files = listCommitFiles(commit.hash)
+    const sharedPath = "modules/_shared"
+    return files.some(
+      (file) =>
+        file === modulePath ||
+        file.startsWith(modulePath + "/") ||
+        file === sharedPath ||
+        file.startsWith(sharedPath + "/")
+    )
+  })
+
+export async function analyzeCommits (pluginConfig, context) {
+  const modulePath = pluginConfig.modulePath
+  const commits = filterCommitsByPath(context.commits || [], modulePath)
+  return commitAnalyzer(pluginConfig.analyzer || {}, {
+    ...context,
+    commits
+  })
+}
+
+export async function generateNotes (pluginConfig, context) {
+  const modulePath = pluginConfig.modulePath
+  const commits = filterCommitsByPath(context.commits || [], modulePath)
+  return releaseNotesGenerator(pluginConfig.notes || {}, {
+    ...context,
+    commits
+  })
+}
+`
 const releaseIndex = `import { execSync } from "child_process"
 import fs from "fs"
 import path from "path"
@@ -150,3 +198,4 @@ if (!result) {
 }
 `
 fs.writeFileSync(releaseIndexPath, releaseIndex)
+fs.writeFileSync(filteredCommitsPath, filteredCommitsPlugin)
