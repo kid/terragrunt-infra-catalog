@@ -12,3 +12,9 @@
 *.tfstate
 *.tfstate.backup
 *.tfstate.lock.info
+
+# Node
+node_modules
+.releases
+.github/node_modules
+.github/.releases
