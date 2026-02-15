@@ -1,0 +1,13 @@
+module "dhcp_server" {
+  depends_on     = [routeros_ip_address.addresses]
+  for_each       = var.dhcp_servers
+  source         = "../ros-dhcp-server"
+  interface_name = each.key
+  cidr           = each.value.cidr
+  gateway        = each.value.gateway
+  dhcp_ranges    = each.value.dhcp_pool
+  ntp_servers    = each.value.ntp_servers
+  dns_servers    = each.value.dns_servers
+  domain         = each.value.domain
+  static_leases  = lookup(var.dhcp_static_leases, each.key, [])
+}
