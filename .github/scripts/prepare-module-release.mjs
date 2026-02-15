@@ -189,7 +189,7 @@ const hasChanges = () => {
     return true
   }
 
-  const range = lastTag ? lastTag + "..HEAD" : "HEAD"
+  const range = lastTag + "..HEAD"
   const output = execSync(
     "git log " +
       range +
