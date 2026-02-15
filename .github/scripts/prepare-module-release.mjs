@@ -212,14 +212,6 @@ if (!hasChanges()) {
   process.exit(0)
 }
 
-  return output.length > 0
-}
-
-if (!hasChanges()) {
-  console.log("No changes in " + modulePath + "; skipping release.")
-  process.exit(0)
-}
-
 const result = await semanticRelease(config, {
   cwd: process.cwd(),
   env: process.env,
