@@ -216,9 +216,13 @@ if (!hasChanges()) {
 
 const baseEnv = { ...process.env }
 if (isDryRun) {
+  const branchName = execSync("git rev-parse --abbrev-ref HEAD", {
+    encoding: "utf8"
+  }).trim()
+
   baseEnv.CI = "false"
   baseEnv.GITHUB_EVENT_NAME = "push"
-  baseEnv.GITHUB_REF = "refs/heads/main"
+  baseEnv.GITHUB_REF = "refs/heads/" + branchName
   baseEnv.GITHUB_BASE_REF = ""
   baseEnv.GITHUB_HEAD_REF = ""
 }
