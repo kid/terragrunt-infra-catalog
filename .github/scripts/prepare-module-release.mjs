@@ -116,10 +116,10 @@ const hasChanges = () => {
     lastTag = "";
   }
 
-  const range = lastTag ? `${lastTag}..HEAD` : "HEAD";
-  const output = execSync(`git log ${range} -- ${modulePath}`, {
-    encoding: "utf8" }
-  ).trim();
+  const range = lastTag ? lastTag + "..HEAD" : "HEAD";
+  const output = execSync("git log " + range + " -- " + modulePath, {
+    encoding: "utf8"
+  }).trim();
 
   return output.length > 0;
 };
