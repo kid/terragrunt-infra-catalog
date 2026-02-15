@@ -25,6 +25,7 @@ const releaseConfig = {
       './.github/.releases/' + moduleName + '/filtered-commits.mjs',
       {
         modulePath: 'modules/' + moduleName,
+        unitPath: 'units/' + moduleName,
         analyzer: { preset: 'conventionalcommits' },
         notes: { preset: 'conventionalcommits' }
       }
@@ -86,7 +87,7 @@ const listCommitFiles = (hash) => {
   }
 }
 
-const filterCommitsByPath = (commits, modulePath) =>
+const filterCommitsByPath = (commits, modulePath, unitPath) =>
   commits.filter((commit) => {
     const files = listCommitFiles(commit.hash)
     const sharedPath = "modules/_shared"
@@ -94,6 +95,7 @@ const filterCommitsByPath = (commits, modulePath) =>
       (file) =>
         file === modulePath ||
         file.startsWith(modulePath + "/") ||
+        (unitPath && (file === unitPath || file.startsWith(unitPath + "/"))) ||
         file === sharedPath ||
         file.startsWith(sharedPath + "/")
     )
@@ -101,7 +103,12 @@ const filterCommitsByPath = (commits, modulePath) =>
 
 export async function analyzeCommits (pluginConfig, context) {
   const modulePath = pluginConfig.modulePath
-  const commits = filterCommitsByPath(context.commits || [], modulePath)
+  const unitPath = pluginConfig.unitPath
+  const commits = filterCommitsByPath(
+    context.commits || [],
+    modulePath,
+    unitPath
+  )
   return commitAnalyzer(pluginConfig.analyzer || {}, {
     ...context,
     commits
@@ -110,7 +117,12 @@ export async function analyzeCommits (pluginConfig, context) {
 
 export async function generateNotes (pluginConfig, context) {
   const modulePath = pluginConfig.modulePath
-  const commits = filterCommitsByPath(context.commits || [], modulePath)
+  const unitPath = pluginConfig.unitPath
+  const commits = filterCommitsByPath(
+    context.commits || [],
+    modulePath,
+    unitPath
+  )
   return releaseNotesGenerator(pluginConfig.notes || {}, {
     ...context,
     commits
