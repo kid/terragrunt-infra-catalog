@@ -71,7 +71,7 @@ const listCommitFiles = (hash) => {
     )
 
     return output
-      .split("\n")
+      .split("\\n")
       .map((line) => line.trim())
       .filter((line) => line.length > 0)
   } catch (error) {
