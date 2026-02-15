@@ -59,8 +59,11 @@ const filteredCommitsPlugin = `import { execSync } from "child_process"
 import { createRequire } from "module"
 
 const require = createRequire(import.meta.url)
-const commitAnalyzer = require("@semantic-release/commit-analyzer")
-const releaseNotesGenerator = require("@semantic-release/release-notes-generator")
+const commitAnalyzerModule = require("@semantic-release/commit-analyzer")
+const releaseNotesGeneratorModule = require("@semantic-release/release-notes-generator")
+const commitAnalyzer = commitAnalyzerModule.default || commitAnalyzerModule
+const releaseNotesGenerator =
+  releaseNotesGeneratorModule.default || releaseNotesGeneratorModule
 
 const listCommitFiles = (hash) => {
   if (!hash) {
