@@ -15,7 +15,7 @@ if (!fs.existsSync(logPath)) {
 }
 
 const log = fs.readFileSync(logPath, 'utf8')
-const publishedMatch = log.match(/Published release (\d+\.\d+\.\d+)/)
+const publishedMatch = log.match(/Published .* release (\d+\.\d+\.\d+)/)
 const notesMatch = log.match(/Release note for version .*?\n([\s\S]*)/)
 
 if (!publishedMatch) {
