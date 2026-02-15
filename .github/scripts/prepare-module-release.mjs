@@ -56,8 +56,11 @@ fs.writeFileSync(
 const releaseIndexPath = path.join(contextPath, 'index.mjs')
 const filteredCommitsPath = path.join(contextPath, 'filtered-commits.mjs')
 const filteredCommitsPlugin = `import { execSync } from "child_process"
-import commitAnalyzer from "@semantic-release/commit-analyzer"
-import releaseNotesGenerator from "@semantic-release/release-notes-generator"
+import { createRequire } from "module"
+
+const require = createRequire(import.meta.url)
+const commitAnalyzer = require("@semantic-release/commit-analyzer")
+const releaseNotesGenerator = require("@semantic-release/release-notes-generator")
 
 const listCommitFiles = (hash) => {
   if (!hash) {
