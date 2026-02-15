@@ -125,7 +125,7 @@ const hasChanges = () => {
 };
 
 if (!hasChanges()) {
-  console.log(`No changes in ${modulePath}; skipping release.`);
+  console.log("No changes in " + modulePath + "; skipping release.");
   process.exit(0);
 }
 
@@ -138,10 +138,14 @@ const result = await semanticRelease(config, {
 });
 
 if (!result) {
-  console.log(`No release published for ${moduleName}.`);
+  console.log("No release published for ${moduleName}.");
 } else {
   console.log(
-    `Published ${moduleName} release ${result.nextRelease.version} as ${result.nextRelease.gitTag}.`
+    "Published ${moduleName} release " +
+      result.nextRelease.version +
+      " as " +
+      result.nextRelease.gitTag +
+      "."
   );
 }
 `;
