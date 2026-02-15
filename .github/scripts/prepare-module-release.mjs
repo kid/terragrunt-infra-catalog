@@ -41,7 +41,16 @@ const releaseConfig = {
         message: `chore(release:${moduleName}): \${nextRelease.version} [skip ci]`
       }
     ],
-    '@semantic-release/github'
+    [
+      '@semantic-release/github',
+      {
+        successComment:
+          `:tada: This PR is included in ${moduleName} v\${nextRelease.version} :tada:\n\n` +
+          `The release is available on [GitHub release](\${releaseUrl})\n\n` +
+          'Your **[semantic-release](https://github.com/semantic-release/semantic-release)** bot :package::rocket:',
+        failComment: false
+      }
+    ]
   ]
 }
 
@@ -101,14 +110,26 @@ const filterCommitsByPath = (commits, modulePath, unitPath) =>
     )
   })
 
-export async function analyzeCommits (pluginConfig, context) {
-  const modulePath = pluginConfig.modulePath
-  const unitPath = pluginConfig.unitPath
+const filterContextCommits = (context, modulePath, unitPath) => {
   const commits = filterCommitsByPath(
     context.commits || [],
     modulePath,
     unitPath
   )
+  context.commits = commits
+  return commits
+}
+
+export async function verifyConditions (pluginConfig, context) {
+  const modulePath = pluginConfig.modulePath
+  const unitPath = pluginConfig.unitPath
+  filterContextCommits(context, modulePath, unitPath)
+}
+
+export async function analyzeCommits (pluginConfig, context) {
+  const modulePath = pluginConfig.modulePath
+  const unitPath = pluginConfig.unitPath
+  const commits = filterContextCommits(context, modulePath, unitPath)
   return commitAnalyzer(pluginConfig.analyzer || {}, {
     ...context,
     commits
@@ -118,11 +139,7 @@ export async function analyzeCommits (pluginConfig, context) {
 export async function generateNotes (pluginConfig, context) {
   const modulePath = pluginConfig.modulePath
   const unitPath = pluginConfig.unitPath
-  const commits = filterCommitsByPath(
-    context.commits || [],
-    modulePath,
-    unitPath
-  )
+  const commits = filterContextCommits(context, modulePath, unitPath)
   return releaseNotesGenerator(pluginConfig.notes || {}, {
     ...context,
     commits
