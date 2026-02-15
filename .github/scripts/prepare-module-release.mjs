@@ -214,9 +214,18 @@ if (!hasChanges()) {
   process.exit(0)
 }
 
+const baseEnv = { ...process.env }
+if (isDryRun) {
+  baseEnv.CI = "false"
+  baseEnv.GITHUB_EVENT_NAME = "push"
+  baseEnv.GITHUB_REF = "refs/heads/main"
+  baseEnv.GITHUB_BASE_REF = ""
+  baseEnv.GITHUB_HEAD_REF = ""
+}
+
 const result = await semanticRelease(config, {
   cwd: process.cwd(),
-  env: { ...process.env, CI: "false" },
+  env: baseEnv,
   stdout,
   stderr,
   dryRun: isDryRun
