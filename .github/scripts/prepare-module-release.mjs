@@ -46,7 +46,7 @@ const releaseConfig = {
       {
         successComment:
           `:tada: This PR is included in ${moduleName} v\${nextRelease.version} :tada:\n\n` +
-          'The release is available on [GitHub release](<%= releaseUrl %>)\n\n' +
+          'The release is available on [GitHub release](<%= releases[0].url %>)\n\n' +
           'Your **[semantic-release](https://github.com/semantic-release/semantic-release)** bot :package::rocket:',
         failComment: false
       }
