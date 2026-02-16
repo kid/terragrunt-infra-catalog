@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/kid/terragrunt-infra-catalog/compare/ros-capsman-v1.1.0...ros-capsman-v1.1.1) (2026-02-16)
+
+
+### Bug Fixes
+
+* typo in 5ghz wifi name ([ba47f18](https://github.com/kid/terragrunt-infra-catalog/commit/ba47f18ea7d45bc033e25d011ce5ff9a919f19a1))
+
 ## [1.1.0](https://github.com/kid/terragrunt-infra-catalog/compare/ros-capsman-v1.0.1...ros-capsman-v1.1.0) (2026-02-16)
 
 
