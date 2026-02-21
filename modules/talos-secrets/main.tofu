@@ -1,5 +1,8 @@
 provider "onepassword" {
-  account = var.op_account
+  account               = var.op_account
+  service_account_token = var.op_service_account_token
+  connect_url           = var.op_connect_url
+  connect_token         = var.op_connect_token
 }
 
 resource "talos_machine_secrets" "this" {
