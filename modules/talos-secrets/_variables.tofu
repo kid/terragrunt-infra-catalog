@@ -33,3 +33,9 @@ variable "op_item" {
   description = "1Password item title"
   default     = "talos"
 }
+
+variable "op_account" {
+  type        = string
+  description = "1Password account name or ID (required when using the desktop app integration)"
+  default     = null
+}
