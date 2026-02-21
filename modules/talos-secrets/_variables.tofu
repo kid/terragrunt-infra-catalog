@@ -33,29 +33,3 @@ variable "op_item" {
   description = "1Password item title"
   default     = "talos"
 }
-
-variable "op_account" {
-  type        = string
-  description = "1Password account name or ID (required when using the desktop app integration)"
-  default     = null
-}
-
-variable "op_service_account_token" {
-  type        = string
-  sensitive   = true
-  description = "1Password service account token (preferred for headless environments)"
-  default     = null
-}
-
-variable "op_connect_url" {
-  type        = string
-  description = "1Password Connect server URL"
-  default     = null
-}
-
-variable "op_connect_token" {
-  type        = string
-  sensitive   = true
-  description = "1Password Connect server token"
-  default     = null
-}
