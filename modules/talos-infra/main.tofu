@@ -89,6 +89,10 @@ resource "proxmox_virtual_environment_vm" "nodes" {
     dedicated = each.value.memory
   }
 
+  rng {
+    source = "/dev/urandom"
+  }
+
   disk {
     datastore_id = each.value.datastore_id
     file_id      = proxmox_virtual_environment_download_file.talos_image.id
