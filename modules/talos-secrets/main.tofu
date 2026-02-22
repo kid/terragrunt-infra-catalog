@@ -1,5 +1,9 @@
 provider "onepassword" {}
 
+data "onepassword_vault" "self" {
+  name = var.op_vault
+}
+
 resource "talos_machine_secrets" "this" {
   talos_version = var.talos_version
 }
@@ -36,12 +40,12 @@ locals {
 }
 
 resource "onepassword_item" "talos" {
-  vault    = var.op_vault
+  vault    = data.onepassword_vault.self.uuid
   title    = var.op_item
   category = "password"
 
   section_map = {
-    "Talos" = {
+    secrets = {
       field_map = {
         for key, value in local.secrets : key => {
           type  = "CONCEALED"
