@@ -12,10 +12,10 @@ data "onepassword_item" "routeros" {
 
 locals {
   op_proxmox = {
-    for field in data.onepassword_item.proxmox.section[0].field : field.label => field.value
+    for field in data.onepassword_item.proxmox.section[0].field : lower(field.label) => field.value
   }
   op_routeros = {
-    for field in data.onepassword_item.routeros.section[0].field : field.label => field.value
+    for field in data.onepassword_item.routeros.section[0].field : lower(field.label) => field.value
   }
 }
 
