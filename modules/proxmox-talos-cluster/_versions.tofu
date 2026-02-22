@@ -18,10 +18,6 @@ terraform {
       source  = "1Password/onepassword"
       version = "3.2.1"
     }
-    external = {
-      source  = "hashicorp/external"
-      version = "2.3.5"
-    }
     macaddress = {
       source  = "ivoronin/macaddress"
       version = "0.3.0"

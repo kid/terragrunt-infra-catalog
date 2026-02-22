@@ -1,43 +1,4 @@
-data "onepassword_item" "proxmox" {
-  vault = var.op_vault
-  title = var.op_item_proxmox
-}
-
-data "onepassword_item" "routeros" {
-  vault = var.op_vault
-  title = var.op_item_routeros
-}
-
-data "external" "endpoint" {
-  for_each = toset(strcontains(local.routeros_endpoint, "://") ? [] : ["self"])
-  # Terragrunt's generate won't set execute flag, so we explicitely use bash here
-  program = ["bash", "${path.module}/get_ros_endpoint.sh", local.routeros_endpoint]
-}
-
 locals {
-  op_field_map = {
-    username = "username"
-    password = "password"
-    endpoint = "endpoint"
-    realm    = "realm"
-  }
-
-  op_proxmox = {
-    for field in data.onepassword_item.proxmox.section[0].field : lower(field.label) => field.value
-  }
-  op_routeros = {
-    for field in data.onepassword_item.routeros.section[0].field : lower(field.label) => field.value
-  }
-
-  proxmox_endpoint = local.op_proxmox[local.op_field_map.endpoint]
-  proxmox_username = local.op_proxmox[local.op_field_map.username]
-  proxmox_password = local.op_proxmox[local.op_field_map.password]
-  proxmox_realm    = local.op_proxmox[local.op_field_map.realm]
-
-  routeros_endpoint = local.op_routeros[local.op_field_map.endpoint]
-  routeros_username = local.op_routeros[local.op_field_map.username]
-  routeros_password = local.op_routeros[local.op_field_map.password]
-
   nodes = {
     for name, node in var.nodes : name => {
       vm_name      = "${name}.${var.dhcp_dns_zone}"
