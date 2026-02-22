@@ -19,6 +19,12 @@ develop:
 test:
     cd test && go test -v
 
+fmt:
+    nix develop -c treefmt
+
+fmt-check:
+    nix develop -c treefmt --ci
+
 validate:
     #!/usr/bin/env bash
     set -euo pipefail
