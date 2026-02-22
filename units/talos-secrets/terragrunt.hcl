@@ -5,3 +5,5 @@ include "root" {
 terraform {
   source = "git::git@github.com:kid/terragrunt-infra-catalog//modules/talos-secrets?ref=${values.version}"
 }
+
+inputs = values

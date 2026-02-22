@@ -10,25 +10,26 @@ data "onepassword_item" "routeros" {
   title = var.op_item_routeros
 }
 
-locals {
-  op_proxmox = {
-    for field in data.onepassword_item.proxmox.section[0].field : lower(field.label) => field.value
-  }
-  op_routeros = {
-    for field in data.onepassword_item.routeros.section[0].field : lower(field.label) => field.value
-  }
-}
+# locals {
+#   op_proxmox = {
+#     for field in data.onepassword_item.proxmox.section[0].field : lower(field.label) => field.value
+#   }
+#   op_routeros = {
+#     for field in data.onepassword_item.routeros.section[0].field : lower(field.label) => field.value
+#   }
+# }
 
 provider "proxmox" {
-  endpoint = local.op_proxmox["endpoint"]
-  username = "${local.op_proxmox["username"]}@${local.op_proxmox["realm"]}"
-  password = local.op_proxmox["password"]
-  insecure = var.proxmox_insecure
+  # endpoint = local.op_proxmox["endpoint"]
+  endpoint = data.onepassword_item.proxmox.url
+  username = data.onepassword_item.proxmox.username
+  password = data.onepassword_item.proxmox.password
+  insecure = false
 }
 
 provider "routeros" {
-  hosturl  = local.op_routeros["endpoint"]
-  insecure = coalesce(var.routeros_insecure, true)
-  username = local.op_routeros["username"]
-  password = local.op_routeros["password"]
+  hosturl  = data.onepassword_item.routeros.url
+  username = data.onepassword_item.routeros.username
+  password = data.onepassword_item.routeros.password
+  insecure = true
 }
