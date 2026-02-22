@@ -10,19 +10,9 @@ data "onepassword_item" "routeros" {
   title = var.op_item_routeros
 }
 
-# locals {
-#   op_proxmox = {
-#     for field in data.onepassword_item.proxmox.section[0].field : lower(field.label) => field.value
-#   }
-#   op_routeros = {
-#     for field in data.onepassword_item.routeros.section[0].field : lower(field.label) => field.value
-#   }
-# }
-
 provider "proxmox" {
-  # endpoint = local.op_proxmox["endpoint"]
   endpoint = data.onepassword_item.proxmox.url
-  username = data.onepassword_item.proxmox.username
+  username = "${data.onepassword_item.proxmox.username}@${data.onepassword_item.proxmox.fields.realm}"
   password = data.onepassword_item.proxmox.password
   insecure = false
 }
