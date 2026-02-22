@@ -25,11 +25,9 @@ variable "talos_nodes" {
 variable "op_vault" {
   type        = string
   description = "1Password vault name or UUID"
-  default     = "home-ops"
 }
 
 variable "op_item" {
   type        = string
   description = "1Password item title"
-  default     = "talos"
 }
