@@ -24,32 +24,12 @@ jobs:
           if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
             git fetch origin "${GITHUB_BASE_REF}" --depth=1
             git diff --name-only "origin/${GITHUB_BASE_REF}...${GITHUB_SHA}" > changed_files.txt
-          else
-            : > changed_files.txt
           fi
-          node .github/scripts/discover-modules.mjs > all_modules.json
-          node -e '
-            const fs = require("fs");
-            const eventName = process.env.GITHUB_EVENT_NAME;
-            const allModules = JSON.parse(fs.readFileSync("all_modules.json", "utf8")).include || [];
-            let include = allModules;
-            if (eventName === "pull_request") {
-              const files = fs.readFileSync("changed_files.txt", "utf8").trim().split("\n").filter(Boolean);
-              const changed = new Set();
-              for (const file of files) {
-                const match = file.match(/^modules\/([^/]+)\//);
-                if (match && match[1] !== "_shared") changed.add(match[1]);
-              }
-              const allowed = new Set(allModules.map((entry) => entry.name));
-              include = [...changed].filter((name) => allowed.has(name)).sort().map((name) => ({ name }));
-            }
-            const matrix = include.length ? JSON.stringify({ include }) : "";
-            if (process.env.GITHUB_OUTPUT) {
-              fs.appendFileSync(process.env.GITHUB_OUTPUT, `matrix=${matrix}\n`);
-            } else {
-              console.log(matrix);
-            }
-          '
+          if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+            CHANGED_FILES_PATH=changed_files.txt node .github/scripts/discover-modules.mjs
+          else
+            node .github/scripts/discover-modules.mjs
+          fi
 
   lint-modules:
     runs-on: ubuntu-latest
