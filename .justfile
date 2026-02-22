@@ -18,3 +18,41 @@ develop:
 
 test:
     cd test && go test -v
+
+validate:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    ROOT_DIR="modules"
+    for dir in $(ls -d "$ROOT_DIR"/* "$ROOT_DIR"/*/* 2>/dev/null); do
+        base="$(basename "$dir")"
+        if [[ "$base" == _* ]]; then
+            continue
+        fi
+        if ls "$dir"/*.tofu >/dev/null 2>&1; then
+            echo "Validating tofu module in: $dir"
+            (
+                cd "$dir"
+                tofu init -backend=false
+                tofu validate
+            )
+        fi
+    done
+
+tflint:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    ROOT_DIR="modules"
+    for dir in $(ls -d "$ROOT_DIR"/* "$ROOT_DIR"/*/* 2>/dev/null); do
+        base="$(basename "$dir")"
+        if [[ "$base" == _* ]]; then
+            continue
+        fi
+        if ls "$dir"/*.tofu >/dev/null 2>&1; then
+            echo "Running tflint in: $dir"
+            (
+                cd "$dir"
+                tflint --init
+                tflint
+            )
+        fi
+    done

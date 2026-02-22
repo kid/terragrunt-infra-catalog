@@ -51,6 +51,7 @@
               opentofu
               tofu-ls
               terragrunt
+              tflint
             ];
 
             inputsFrom = [ config.treefmt.build.devShell ];
