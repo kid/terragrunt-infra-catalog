@@ -89,7 +89,7 @@ resource "proxmox_virtual_environment_vm" "nodes" {
     dedicated = each.value.memory
   }
 
-  rng_device {
+  rng {
     source = "/dev/urandom"
   }
 
