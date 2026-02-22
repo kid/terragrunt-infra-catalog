@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/kid/terragrunt-infra-catalog/compare/talos-secrets-v1.0.0...talos-secrets-v1.0.1) (2026-02-22)
+
+
+### Bug Fixes
+
+* require vault UUID for 1Password item ([2095002](https://github.com/kid/terragrunt-infra-catalog/commit/209500287be1c4b6f90c233ff68d2f39fb991214))
+
 ## 1.0.0 (2026-02-22)
 
 
