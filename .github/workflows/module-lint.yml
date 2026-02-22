@@ -1,0 +1,115 @@
+name: module-lint
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  push:
+    branches:
+      - main
+
+jobs:
+  discover-modules:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Discover modules
+        id: discover
+        run: node .github/scripts/discover-modules.mjs
+
+  discover-changes:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    outputs:
+      changed: ${{ steps.changed.outputs.changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Collect changed files
+        id: changed
+        run: |
+          set -euo pipefail
+          git fetch origin "${GITHUB_BASE_REF}" --depth=1
+          git diff --name-only "origin/${GITHUB_BASE_REF}...${GITHUB_SHA}" > changed_files.txt
+          node -e '
+            const fs = require("fs");
+            const files = fs.readFileSync("changed_files.txt", "utf8").trim().split("\n").filter(Boolean);
+            const modules = new Set();
+            for (const file of files) {
+              const match = file.match(/^modules\/([^/]+)\//);
+              if (match && match[1] !== "_shared") modules.add(match[1]);
+            }
+            const include = [...modules].sort().map((name) => ({ name }));
+            const changed = include.length ? JSON.stringify({ include }) : "";
+            if (process.env.GITHUB_OUTPUT) {
+              fs.appendFileSync(process.env.GITHUB_OUTPUT, `changed=${changed}\n`);
+            } else {
+              console.log(changed);
+            }
+          '
+
+  lint-modules:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && needs.discover-modules.outputs.matrix != '' }}
+    needs:
+      - discover-modules
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover-modules.outputs.matrix) }}
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v11
+      - name: Use Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v7
+      - name: Validate module
+        working-directory: modules/${{ matrix.name }}
+        run: |
+          nix develop -c tofu init -backend=false
+          nix develop -c tofu validate
+      - name: Lint module
+        working-directory: modules/${{ matrix.name }}
+        run: |
+          nix develop -c tflint --init
+          nix develop -c tflint
+
+  lint-modules-changed:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && needs.discover-changes.outputs.changed != '' }}
+    needs:
+      - discover-changes
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover-changes.outputs.changed) }}
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v11
+      - name: Use Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v7
+      - name: Validate module
+        working-directory: modules/${{ matrix.name }}
+        run: |
+          nix develop -c tofu init -backend=false
+          nix develop -c tofu validate
+      - name: Lint module
+        working-directory: modules/${{ matrix.name }}
+        run: |
+          nix develop -c tflint --init
+          nix develop -c tflint
