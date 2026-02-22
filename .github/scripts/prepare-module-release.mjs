@@ -1,70 +1,70 @@
-import fs from 'fs'
-import path from 'path'
+import fs from "fs";
+import path from "path";
 
-const moduleName = process.env.MODULE_NAME
+const moduleName = process.env.MODULE_NAME;
 
 if (!moduleName) {
-  console.error('MODULE_NAME is required')
-  process.exit(1)
+  console.error("MODULE_NAME is required");
+  process.exit(1);
 }
 
-const moduleDir = path.resolve('modules', moduleName)
+const moduleDir = path.resolve("modules", moduleName);
 if (!fs.existsSync(moduleDir)) {
-  console.error(`Module directory not found: ${moduleDir}`)
-  process.exit(1)
+  console.error(`Module directory not found: ${moduleDir}`);
+  process.exit(1);
 }
 
-const contextPath = path.join('.github', '.releases', moduleName)
-fs.mkdirSync(contextPath, { recursive: true })
+const contextPath = path.join(".github", ".releases", moduleName);
+fs.mkdirSync(contextPath, { recursive: true });
 
 const releaseConfig = {
-  branches: ['main'],
+  branches: ["main"],
   tagFormat: `${moduleName}-v\${version}`,
   plugins: [
     [
-      './.github/.releases/' + moduleName + '/filtered-commits.mjs',
+      "./.github/.releases/" + moduleName + "/filtered-commits.mjs",
       {
-        modulePath: 'modules/' + moduleName,
-        unitPath: 'units/' + moduleName,
-        analyzer: { preset: 'conventionalcommits' },
-        notes: { preset: 'conventionalcommits' }
-      }
+        modulePath: "modules/" + moduleName,
+        unitPath: "units/" + moduleName,
+        analyzer: { preset: "conventionalcommits" },
+        notes: { preset: "conventionalcommits" },
+      },
     ],
     [
-      '@semantic-release/changelog',
-      { changelogFile: 'modules/' + moduleName + '/CHANGELOG.md' }
+      "@semantic-release/changelog",
+      { changelogFile: "modules/" + moduleName + "/CHANGELOG.md" },
     ],
     [
-      '@semantic-release/git',
+      "@semantic-release/git",
       {
-        assets: ['modules/' + moduleName + '/CHANGELOG.md'],
-        message: `chore(release:${moduleName}): \${nextRelease.version} [skip ci]`
-      }
+        assets: ["modules/" + moduleName + "/CHANGELOG.md"],
+        message: `chore(release:${moduleName}): \${nextRelease.version} [skip ci]`,
+      },
     ],
     [
-      '@semantic-release/github',
+      "@semantic-release/github",
       {
         successComment:
           `:tada: This PR is included in ${moduleName} v\${nextRelease.version} :tada:\n\n` +
-          'The release is available on [GitHub release](<%= releases[0].url %>)\n\n' +
-          'Your **[semantic-release](https://github.com/semantic-release/semantic-release)** bot :package::rocket:',
-        failComment: false
-      }
-    ]
-  ]
-}
+          "The release is available on [GitHub release](<%= releases[0].url %>)\n\n" +
+          "Your **[semantic-release](https://github.com/semantic-release/semantic-release)** bot :package::rocket:",
+        failComment: false,
+      },
+    ],
+  ],
+};
 
-const releaseConfigPath = path.join(contextPath, 'release.config.json')
-fs.writeFileSync(releaseConfigPath, JSON.stringify(releaseConfig, null, 2))
+const releaseConfigPath = path.join(contextPath, "release.config.json");
+fs.writeFileSync(releaseConfigPath, JSON.stringify(releaseConfig, null, 2));
 
-const releaseRcPath = path.join(contextPath, '.releaserc.json')
+const releaseRcPath = path.join(contextPath, ".releaserc.json");
 fs.writeFileSync(
   releaseRcPath,
-  JSON.stringify({ extends: './release.config.json' }, null, 2)
-)
+  JSON.stringify({ extends: "./release.config.json" }, null, 2),
+);
 
-const releaseIndexPath = path.join(contextPath, 'index.mjs')
-const filteredCommitsPath = path.join(contextPath, 'filtered-commits.mjs')
+const releaseIndexPath = path.join(contextPath, "index.mjs");
+const filteredCommitsPath = path.join(contextPath, "filtered-commits.mjs");
 const filteredCommitsPlugin = `import { execSync } from "child_process"
 import { createRequire } from "module"
 
@@ -145,7 +145,7 @@ export async function generateNotes (pluginConfig, context) {
     commits
   })
 }
-`
+`;
 const releaseIndex = `import { execSync } from "child_process"
 import fs from "fs"
 import path from "path"
@@ -248,6 +248,6 @@ if (!result) {
       "."
   )
 }
-`
-fs.writeFileSync(releaseIndexPath, releaseIndex)
-fs.writeFileSync(filteredCommitsPath, filteredCommitsPlugin)
+`;
+fs.writeFileSync(releaseIndexPath, releaseIndex);
+fs.writeFileSync(filteredCommitsPath, filteredCommitsPlugin);

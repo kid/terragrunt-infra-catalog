@@ -1,23 +1,16 @@
 {
-  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-  extends: [
-    'config:recommended',
-    'docker:enableMajor',
-  ],
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended", "docker:enableMajor"],
   ignorePaths: [
-    '.archived/**/*',
-    '.github/go\\.mod',
-    '**/.dagger/go\\.mod',
-    '**/*.sops.*',
+    ".archived/**/*",
+    ".github/go\\.mod",
+    "**/.dagger/go\\.mod",
+    "**/*.sops.*",
   ],
   flux: {
-    managerFilePatterns: [
-      '/clusters/.+\\.yaml$/',
-    ],
+    managerFilePatterns: ["/clusters/.+\\.yaml$/"],
   },
   kubernetes: {
-    managerFilePatterns: [
-      '/(^|/)clusters/.+\\.ya?ml(?:\\.j2)?$/',
-    ],
+    managerFilePatterns: ["/(^|/)clusters/.+\\.ya?ml(?:\\.j2)?$/"],
   },
 }
