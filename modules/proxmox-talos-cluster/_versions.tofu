@@ -14,9 +14,13 @@ terraform {
       source  = "terraform-routeros/routeros"
       version = "1.99.0"
     }
-    sops = {
-      source  = "carlpett/sops"
-      version = "1.3.0"
+    onepassword = {
+      source  = "1Password/onepassword"
+      version = "3.2.1"
+    }
+    external = {
+      source  = "hashicorp/external"
+      version = "2.3.5"
     }
     macaddress = {
       source  = "ivoronin/macaddress"

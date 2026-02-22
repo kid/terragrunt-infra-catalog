@@ -4,6 +4,21 @@ variable "cluster_name" {
   default     = "talos-cluster"
 }
 
+variable "op_vault" {
+  type        = string
+  description = "1Password vault name or UUID for shared credentials"
+}
+
+variable "op_item_proxmox" {
+  type        = string
+  description = "1Password item title containing Proxmox credentials"
+}
+
+variable "op_item_routeros" {
+  type        = string
+  description = "1Password item title containing RouterOS credentials"
+}
+
 variable "nodes" {
   type = map(object({
     ip_address   = string
@@ -71,6 +86,12 @@ variable "network_bridge" {
   default     = "vmbr0"
 }
 
+variable "proxmox_insecure" {
+  type        = bool
+  default     = false
+  description = "Whether to skip TLS certificate verification when connecting to the Proxmox server"
+}
+
 variable "dhcp_server" {
   type        = string
   description = "RouterOS DHCP server name for static leases"
@@ -86,6 +107,13 @@ variable "vlan_id" {
   type        = number
   description = "VLAN ID for the network interface"
   default     = null
+}
+
+variable "routeros_insecure" {
+  type        = bool
+  nullable    = true
+  default     = null
+  description = "Whether to skip TLS certificate verification when connecting to the MikroTik device"
 }
 
 variable "schematic_customizations" {
