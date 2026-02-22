@@ -134,3 +134,4 @@ were found in this repository at the time of writing.
 - For tests, ensure you have RouterOS access and SOPS keys.
 - When adding modules, include `_variables.tofu`, `_versions.tofu`, and
   `_outputs.tofu` if applicable for consistency.
+- Do not update any CHANGELOG files; they are maintained by CI.
