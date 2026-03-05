@@ -60,7 +60,7 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v11
       - name: Use Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@v7
+        uses: DeterminateSystems/magic-nix-cache-action@v13
       - name: Run treefmt
         run: nix develop -c treefmt --ci -C "${{ matrix.target }}"
 
@@ -82,7 +82,7 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v11
       - name: Use Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@v7
+        uses: DeterminateSystems/magic-nix-cache-action@v13
       - name: Validate module
         working-directory: modules/${{ matrix.name }}
         run: |
