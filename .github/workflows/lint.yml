@@ -58,7 +58,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v11
+        uses: DeterminateSystems/nix-installer-action@v21
       - name: Use Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v7
       - name: Run treefmt
@@ -80,7 +80,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v11
+        uses: DeterminateSystems/nix-installer-action@v21
       - name: Use Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v7
       - name: Validate module
