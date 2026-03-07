@@ -1,3 +1,10 @@
+## [1.2.0](https://github.com/kid/terragrunt-infra-catalog/compare/talos-infra-v1.1.0...talos-infra-v1.2.0) (2026-03-07)
+
+
+### Features
+
+* **talos-infra:** support additional VM data disks ([#27](https://github.com/kid/terragrunt-infra-catalog/issues/27)) ([93c0caf](https://github.com/kid/terragrunt-infra-catalog/commit/93c0caf1f5d6a90e22b46dd1bf1e3c9ea51a6279))
+
 ## [1.1.0](https://github.com/kid/terragrunt-infra-catalog/compare/talos-infra-v1.0.0...talos-infra-v1.1.0) (2026-02-22)
 
 
