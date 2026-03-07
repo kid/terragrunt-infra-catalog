@@ -33,6 +33,16 @@ variable "nodes" {
       datastore_id = optional(string)
       interface    = optional(string)
     })))
+    pci_devices = optional(list(object({
+      device   = optional(string)
+      id       = optional(string)
+      mapping  = optional(string)
+      mdev     = optional(string)
+      pcie     = optional(bool)
+      rom_file = optional(string)
+      rombar   = optional(bool)
+      xvga     = optional(bool)
+    })))
   }))
   description = "Map of Talos nodes to create. Key is the node name suffix."
 
@@ -43,6 +53,34 @@ variable "nodes" {
       ]
     ]))
     error_message = "Node additional_disks interfaces cannot use virtio0 (reserved for the Talos boot disk)."
+  }
+
+  validation {
+    condition = alltrue(flatten([
+      for _, node in var.nodes : [
+        for idx, device in coalesce(try(node.pci_devices, null), []) :
+        ((try(device.id, null) == null) != (try(device.mapping, null) == null)) && can(regex("^hostpci[0-9]+$", coalesce(try(device.device, null), "hostpci${idx}")))
+      ]
+    ]))
+    error_message = "Node pci_devices must set exactly one of id or mapping, and device must match hostpciN (e.g. hostpci0) when set."
+  }
+
+  validation {
+    condition = alltrue([
+      for _, node in var.nodes :
+      length(coalesce(try(node.pci_devices, null), [])) <= 16
+    ])
+    error_message = "Node pci_devices supports up to 16 entries per VM."
+  }
+
+  validation {
+    condition = alltrue([
+      for _, node in var.nodes :
+      length(distinct([
+        for idx, device in coalesce(try(node.pci_devices, null), []) : coalesce(try(device.device, null), "hostpci${idx}")
+      ])) == length(coalesce(try(node.pci_devices, null), []))
+    ])
+    error_message = "Node pci_devices device values must be unique per VM after default hostpciN assignment."
   }
 }
 
@@ -106,6 +144,41 @@ variable "additional_disks" {
   validation {
     condition     = alltrue([for disk in var.additional_disks : try(disk.interface, null) == null || lower(disk.interface) != "virtio0"])
     error_message = "additional_disks interfaces cannot use virtio0 (reserved for the Talos boot disk)."
+  }
+}
+
+variable "pci_devices" {
+  type = list(object({
+    device   = optional(string)
+    id       = optional(string)
+    mapping  = optional(string)
+    mdev     = optional(string)
+    pcie     = optional(bool)
+    rom_file = optional(string)
+    rombar   = optional(bool)
+    xvga     = optional(bool)
+  }))
+  description = "Default host PCI devices to pass through to Talos VMs. Each device must set exactly one of id or mapping."
+  default     = []
+
+  validation {
+    condition = alltrue([
+      for idx, device in var.pci_devices :
+      ((try(device.id, null) == null) != (try(device.mapping, null) == null)) && can(regex("^hostpci[0-9]+$", coalesce(try(device.device, null), "hostpci${idx}")))
+    ])
+    error_message = "pci_devices must set exactly one of id or mapping, and device must match hostpciN (e.g. hostpci0) when set."
+  }
+
+  validation {
+    condition     = length(var.pci_devices) <= 16
+    error_message = "pci_devices supports up to 16 entries per VM."
+  }
+
+  validation {
+    condition = length(distinct([
+      for idx, device in var.pci_devices : coalesce(try(device.device, null), "hostpci${idx}")
+    ])) == length(var.pci_devices)
+    error_message = "pci_devices device values must be unique after default hostpciN assignment."
   }
 }
 

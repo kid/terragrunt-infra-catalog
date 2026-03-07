@@ -16,6 +16,18 @@ locals {
           interface    = coalesce(try(disk.interface, null), "virtio${idx + 1}")
         }
       ]
+      pci_devices = [
+        for idx, device in coalesce(try(node.pci_devices, null), var.pci_devices) : {
+          device   = coalesce(try(device.device, null), "hostpci${idx}")
+          id       = try(device.id, null)
+          mapping  = try(device.mapping, null)
+          mdev     = try(device.mdev, null)
+          pcie     = try(device.pcie, null)
+          rom_file = try(device.rom_file, null)
+          rombar   = coalesce(try(device.rombar, null), true)
+          xvga     = try(device.xvga, null)
+        }
+      ]
     }
   }
 }
@@ -119,6 +131,21 @@ resource "proxmox_virtual_environment_vm" "nodes" {
       size         = disk.value.size
       iothread     = true
       discard      = "on"
+    }
+  }
+
+  dynamic "hostpci" {
+    for_each = each.value.pci_devices
+
+    content {
+      device   = hostpci.value.device
+      id       = hostpci.value.id
+      mapping  = hostpci.value.mapping
+      mdev     = hostpci.value.mdev
+      pcie     = hostpci.value.pcie
+      rom_file = hostpci.value.rom_file
+      rombar   = hostpci.value.rombar
+      xvga     = hostpci.value.xvga
     }
   }
 
