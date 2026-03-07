@@ -28,8 +28,22 @@ variable "nodes" {
     memory       = optional(number)
     disk_size    = optional(number)
     datastore_id = optional(string)
+    additional_disks = optional(list(object({
+      size         = number
+      datastore_id = optional(string)
+      interface    = optional(string)
+    })))
   }))
   description = "Map of Talos nodes to create. Key is the node name suffix."
+
+  validation {
+    condition = alltrue(flatten([
+      for _, node in var.nodes : [
+        for disk in coalesce(try(node.additional_disks, null), []) : try(disk.interface, null) == null || lower(disk.interface) != "virtio0"
+      ]
+    ]))
+    error_message = "Node additional_disks interfaces cannot use virtio0 (reserved for the Talos boot disk)."
+  }
 }
 
 variable "node_name" {
@@ -78,6 +92,21 @@ variable "datastore_id" {
   type        = string
   description = "Default Proxmox datastore ID for VM disks"
   default     = "local-zfs"
+}
+
+variable "additional_disks" {
+  type = list(object({
+    size         = number
+    datastore_id = optional(string)
+    interface    = optional(string)
+  }))
+  description = "Default additional data disks for Talos VMs. Interfaces default to virtio1+ per node."
+  default     = []
+
+  validation {
+    condition     = alltrue([for disk in var.additional_disks : try(disk.interface, null) == null || lower(disk.interface) != "virtio0"])
+    error_message = "additional_disks interfaces cannot use virtio0 (reserved for the Talos boot disk)."
+  }
 }
 
 variable "network_bridge" {
