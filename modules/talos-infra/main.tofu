@@ -9,6 +9,13 @@ locals {
       memory       = coalesce(node.memory, var.memory)
       disk_size    = coalesce(node.disk_size, var.disk_size)
       datastore_id = coalesce(node.datastore_id, var.datastore_id)
+      additional_disks = [
+        for idx, disk in coalesce(try(node.additional_disks, null), var.additional_disks) : {
+          size         = disk.size
+          datastore_id = coalesce(try(disk.datastore_id, null), var.datastore_id)
+          interface    = coalesce(try(disk.interface, null), "virtio${idx + 1}")
+        }
+      ]
     }
   }
 }
@@ -101,6 +108,18 @@ resource "proxmox_virtual_environment_vm" "nodes" {
     size         = each.value.disk_size
     iothread     = true
     discard      = "on"
+  }
+
+  dynamic "disk" {
+    for_each = each.value.additional_disks
+
+    content {
+      datastore_id = disk.value.datastore_id
+      interface    = disk.value.interface
+      size         = disk.value.size
+      iothread     = true
+      discard      = "on"
+    }
   }
 
   network_device {
