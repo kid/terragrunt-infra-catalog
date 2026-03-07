@@ -34,7 +34,7 @@ variable "nodes" {
       interface    = optional(string)
     })))
     pci_devices = optional(list(object({
-      device   = string
+      device   = optional(string)
       id       = optional(string)
       mapping  = optional(string)
       mdev     = optional(string)
@@ -58,11 +58,11 @@ variable "nodes" {
   validation {
     condition = alltrue(flatten([
       for _, node in var.nodes : [
-        for device in coalesce(try(node.pci_devices, null), []) :
-        ((try(device.id, null) == null) != (try(device.mapping, null) == null)) && can(regex("^hostpci[0-9]+$", device.device))
+        for idx, device in coalesce(try(node.pci_devices, null), []) :
+        ((try(device.id, null) == null) != (try(device.mapping, null) == null)) && can(regex("^hostpci[0-9]+$", coalesce(try(device.device, null), "hostpci${idx}")))
       ]
     ]))
-    error_message = "Node pci_devices must set exactly one of id or mapping, and device must match hostpciN (e.g. hostpci0)."
+    error_message = "Node pci_devices must set exactly one of id or mapping, and device must match hostpciN (e.g. hostpci0) when set."
   }
 
   validation {
@@ -71,6 +71,16 @@ variable "nodes" {
       length(coalesce(try(node.pci_devices, null), [])) <= 16
     ])
     error_message = "Node pci_devices supports up to 16 entries per VM."
+  }
+
+  validation {
+    condition = alltrue([
+      for _, node in var.nodes :
+      length(distinct([
+        for idx, device in coalesce(try(node.pci_devices, null), []) : coalesce(try(device.device, null), "hostpci${idx}")
+      ])) == length(coalesce(try(node.pci_devices, null), []))
+    ])
+    error_message = "Node pci_devices device values must be unique per VM after default hostpciN assignment."
   }
 }
 
@@ -139,7 +149,7 @@ variable "additional_disks" {
 
 variable "pci_devices" {
   type = list(object({
-    device   = string
+    device   = optional(string)
     id       = optional(string)
     mapping  = optional(string)
     mdev     = optional(string)
@@ -153,15 +163,22 @@ variable "pci_devices" {
 
   validation {
     condition = alltrue([
-      for device in var.pci_devices :
-      ((try(device.id, null) == null) != (try(device.mapping, null) == null)) && can(regex("^hostpci[0-9]+$", device.device))
+      for idx, device in var.pci_devices :
+      ((try(device.id, null) == null) != (try(device.mapping, null) == null)) && can(regex("^hostpci[0-9]+$", coalesce(try(device.device, null), "hostpci${idx}")))
     ])
-    error_message = "pci_devices must set exactly one of id or mapping, and device must match hostpciN (e.g. hostpci0)."
+    error_message = "pci_devices must set exactly one of id or mapping, and device must match hostpciN (e.g. hostpci0) when set."
   }
 
   validation {
     condition     = length(var.pci_devices) <= 16
     error_message = "pci_devices supports up to 16 entries per VM."
+  }
+
+  validation {
+    condition = length(distinct([
+      for idx, device in var.pci_devices : coalesce(try(device.device, null), "hostpci${idx}")
+    ])) == length(var.pci_devices)
+    error_message = "pci_devices device values must be unique after default hostpciN assignment."
   }
 }
 

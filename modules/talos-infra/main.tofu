@@ -17,8 +17,8 @@ locals {
         }
       ]
       pci_devices = [
-        for device in coalesce(try(node.pci_devices, null), var.pci_devices) : {
-          device   = device.device
+        for idx, device in coalesce(try(node.pci_devices, null), var.pci_devices) : {
+          device   = coalesce(try(device.device, null), "hostpci${idx}")
           id       = try(device.id, null)
           mapping  = try(device.mapping, null)
           mdev     = try(device.mdev, null)
