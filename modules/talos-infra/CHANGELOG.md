@@ -1,3 +1,10 @@
+## [1.3.0](https://github.com/kid/terragrunt-infra-catalog/compare/talos-infra-v1.2.0...talos-infra-v1.3.0) (2026-03-07)
+
+
+### Features
+
+* **talos-infra:** add host PCI passthrough support ([#28](https://github.com/kid/terragrunt-infra-catalog/issues/28)) ([ba82cfc](https://github.com/kid/terragrunt-infra-catalog/commit/ba82cfce8b1de5b28cb3ad5b5ac26e2852ebe977))
+
 ## [1.2.0](https://github.com/kid/terragrunt-infra-catalog/compare/talos-infra-v1.1.0...talos-infra-v1.2.0) (2026-03-07)
 
 
