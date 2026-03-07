@@ -24,7 +24,7 @@ locals {
           mdev     = try(device.mdev, null)
           pcie     = try(device.pcie, null)
           rom_file = try(device.rom_file, null)
-          rombar   = try(device.rombar, null)
+          rombar   = coalesce(try(device.rombar, null), true)
           xvga     = try(device.xvga, null)
         }
       ]
