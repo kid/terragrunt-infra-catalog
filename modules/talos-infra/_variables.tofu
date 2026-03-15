@@ -218,13 +218,16 @@ variable "routeros_insecure" {
   description = "Whether to skip TLS certificate verification when connecting to the MikroTik device"
 }
 
-variable "schematic_customizations" {
-  type = object({
-    system_extensions = optional(list(string), [])
-  })
-  description = "Talos schematic customizations"
+variable "image_factory_schematic" {
+  type        = map(any)
+  description = "Talos Image Factory schematic object"
   default = {
-    system_extensions = ["qemu-guest-agent"]
+    customization = {
+      systemExtensions = {
+        officialExtensions = ["qemu-guest-agent"]
+      }
+      bootloader = "sd-boot"
+    }
   }
 }
 

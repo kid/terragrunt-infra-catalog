@@ -38,23 +38,8 @@ resource "macaddress" "nodes" {
   prefix   = [172, 31, 107] # AC:1F:6B - Terraform prefix
 }
 
-# Generate Talos schematic for custom image configuration
-data "talos_image_factory_extensions_versions" "this" {
-  talos_version = var.talos_version
-  filters = {
-    names = var.schematic_customizations.system_extensions
-  }
-}
-
 resource "talos_image_factory_schematic" "this" {
-  schematic = yamlencode({
-    customization = {
-      systemExtensions = {
-        officialExtensions = data.talos_image_factory_extensions_versions.this.extensions_info[*].name
-      }
-      bootloader = "sd-boot"
-    }
-  })
+  schematic = yamlencode(var.image_factory_schematic)
 }
 
 # Get Talos image URLs from the factory
