@@ -1,3 +1,10 @@
+## [1.4.0](https://github.com/kid/terragrunt-infra-catalog/compare/talos-infra-v1.3.0...talos-infra-v1.4.0) (2026-03-15)
+
+
+### Features
+
+* **talos-infra:** accept full image factory schematic object ([#32](https://github.com/kid/terragrunt-infra-catalog/issues/32)) ([c700949](https://github.com/kid/terragrunt-infra-catalog/commit/c700949a874ec3e5229381a492d928b8bad51c26))
+
 ## [1.3.0](https://github.com/kid/terragrunt-infra-catalog/compare/talos-infra-v1.2.0...talos-infra-v1.3.0) (2026-03-07)
 
 
