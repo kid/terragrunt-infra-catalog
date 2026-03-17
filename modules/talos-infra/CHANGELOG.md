@@ -1,3 +1,10 @@
+## [1.5.0](https://github.com/kid/terragrunt-infra-catalog/compare/talos-infra-v1.4.0...talos-infra-v1.5.0) (2026-03-17)
+
+
+### Features
+
+* extract Talos BGP into standalone module and unit ([#33](https://github.com/kid/terragrunt-infra-catalog/issues/33)) ([d091d9c](https://github.com/kid/terragrunt-infra-catalog/commit/d091d9c97cf7940585db08d8fbaa4e835cc9133f))
+
 ## [1.4.0](https://github.com/kid/terragrunt-infra-catalog/compare/talos-infra-v1.3.0...talos-infra-v1.4.0) (2026-03-15)
 
 
