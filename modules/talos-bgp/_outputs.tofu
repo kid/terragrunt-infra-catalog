@@ -1,11 +1,11 @@
 output "instance_name" {
-  description = "BGP instance name when enabled"
-  value       = var.bgp_enabled ? routeros_routing_bgp_instance.talos[0].name : null
+  description = "BGP instance name"
+  value       = routeros_routing_bgp_instance.talos.name
 }
 
 output "template_name" {
-  description = "BGP template name when enabled"
-  value       = var.bgp_enabled ? routeros_routing_bgp_template.talos[0].name : null
+  description = "BGP template name"
+  value       = routeros_routing_bgp_template.talos.name
 }
 
 output "connection_names" {
