@@ -28,12 +28,6 @@ variable "nodes" {
   description = "Map of Talos BGP peers keyed by peer name"
 }
 
-variable "bgp_enabled" {
-  type        = bool
-  description = "Enable BGP peering between RouterOS and Talos nodes"
-  default     = false
-}
-
 variable "bgp_local_asn" {
   type        = number
   description = "Local ASN for the RouterOS BGP instance"

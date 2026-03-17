@@ -1,6 +1,4 @@
 resource "routeros_routing_bgp_instance" "talos" {
-  count = var.bgp_enabled ? 1 : 0
-
   name      = "${var.cluster_name}-bgp"
   as        = var.bgp_local_asn
   router_id = var.bgp_router_id
@@ -8,8 +6,6 @@ resource "routeros_routing_bgp_instance" "talos" {
 }
 
 resource "routeros_routing_bgp_template" "talos" {
-  count = var.bgp_enabled ? 1 : 0
-
   name           = "${var.cluster_name}-peers"
   as             = var.bgp_local_asn
   routing_table  = "main"
@@ -18,12 +14,12 @@ resource "routeros_routing_bgp_template" "talos" {
 }
 
 resource "routeros_routing_bgp_connection" "talos" {
-  for_each = var.bgp_enabled ? var.nodes : {}
+  for_each = var.nodes
 
   name      = "${var.cluster_name}-${each.key}"
   as        = var.bgp_local_asn
-  instance  = routeros_routing_bgp_instance.talos[0].name
-  templates = [routeros_routing_bgp_template.talos[0].name]
+  instance  = routeros_routing_bgp_instance.talos.name
+  templates = [routeros_routing_bgp_template.talos.name]
   connect   = true
   listen    = true
 
