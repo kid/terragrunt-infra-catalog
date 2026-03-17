@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/kid/terragrunt-infra-catalog/compare/talos-bgp-v1.0.0...talos-bgp-v1.1.0) (2026-03-17)
+
+
+### Features
+
+* **talos-bgp:** remove optional BGP enable flag ([#34](https://github.com/kid/terragrunt-infra-catalog/issues/34)) ([f3316c9](https://github.com/kid/terragrunt-infra-catalog/commit/f3316c90e60bced26a617ad879395dd08b176d36))
+
 ## 1.0.0 (2026-03-17)
 
 
