@@ -10,14 +10,13 @@ include "provider_proxmox" {
   path = "${get_repo_root()}/modules/_shared/provider-proxmox.hcl"
 }
 
-include "provider_routeros" {
-  path = "${get_repo_root()}/_shared/provider-routeros.hcl"
-}
-
 inputs = {
   # Required inputs
-  devices = values.devices
+  devices          = values.devices
+  op_vault         = values.op_vault
+  op_item_routeros = values.op_item_routeros
 
   # Optional inputs
-  routeros_version = try(values.routeros_version, "7.20.1")
+  routeros_version  = try(values.routeros_version, "7.20.1")
+  routeros_insecure = try(values.routeros_insecure, true)
 }
