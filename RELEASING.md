@@ -26,7 +26,7 @@ semantic-release dry run and only appears when module changes are detected.
 
 ## Tags and changelogs
 
-- Tags are created as `module-<name>-vX.Y.Z`
+- Tags are created as `<name>/vX.Y.Z`
 - Changelogs live at `modules/<name>/CHANGELOG.md`
 
 ## How releases are generated

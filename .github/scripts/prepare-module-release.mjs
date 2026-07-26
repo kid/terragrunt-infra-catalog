@@ -19,7 +19,7 @@ fs.mkdirSync(contextPath, { recursive: true });
 
 const releaseConfig = {
   branches: ["main"],
-  tagFormat: `${moduleName}-v\${version}`,
+  tagFormat: `${moduleName}/v\${version}`,
   plugins: [
     [
       "./.github/.releases/" + moduleName + "/filtered-commits.mjs",
@@ -195,7 +195,7 @@ const hasChanges = () => {
   let lastTag = ""
   try {
     lastTag = execSync(
-      "git describe --tags --match '${moduleName}-v*' --abbrev=0",
+      "git describe --tags --match '${moduleName}/v*' --abbrev=0",
       { encoding: "utf8" }
     ).trim()
   } catch (error) {
