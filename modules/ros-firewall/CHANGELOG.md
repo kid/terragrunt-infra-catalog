@@ -1,3 +1,5 @@
+## [1.0.3](https://github.com/kid/terragrunt-infra-catalog/compare/ros-firewall%2Fv1.0.2...ros-firewall%2Fv1.0.3) (2026-07-26)
+
 ## [1.0.2](https://github.com/kid/terragrunt-infra-catalog/compare/ros-firewall-v1.0.1...ros-firewall-v1.0.2) (2026-07-26)
 
 ## [1.0.1](https://github.com/kid/terragrunt-infra-catalog/compare/ros-firewall-v1.0.0...ros-firewall-v1.0.1) (2026-02-15)
