@@ -1,3 +1,5 @@
+## [1.0.2](https://github.com/kid/terragrunt-infra-catalog/compare/ros-qos%2Fv1.0.1...ros-qos%2Fv1.0.2) (2026-07-26)
+
 ## [1.0.1](https://github.com/kid/terragrunt-infra-catalog/compare/ros-qos-v1.0.0...ros-qos-v1.0.1) (2026-02-15)
 
 
