@@ -1,3 +1,5 @@
+## 1.0.0 (2026-07-26)
+
 ## [1.0.1](https://github.com/kid/terragrunt-infra-catalog/compare/proxmox-ros-lab-v1.0.0...proxmox-ros-lab-v1.0.1) (2026-02-15)
 
 
