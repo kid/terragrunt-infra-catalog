@@ -217,12 +217,13 @@ variable "routeros_groups" {
 
 variable "routeros_users" {
   type = map(object({
-    group    = optional(string, "full")
-    comment  = optional(string)
-    disabled = optional(bool, false)
-    ssh_keys = optional(list(string), [])
+    group         = optional(string, "full")
+    comment       = optional(string)
+    disabled      = optional(bool, false)
+    ssh_keys      = optional(list(string), [])
+    password_item = optional(string)
   }))
-  description = "RouterOS local users, keyed by username. Passwords are not set here: each username other than \"admin\" must have a matching 1Password item titled \"<uppercase hostname> - user - <username>\"; \"admin\" reuses op_item_routeros."
+  description = "RouterOS local users, keyed by username. password_item, when set, is a 1Password item title (in op_vault) whose password is applied to this user; when unset (null), the user is created/updated but its password is left alone (never set, never overwritten) — e.g. admin, unless/until it has its own 1Password item to point at."
 }
 
 # }}}
