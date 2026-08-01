@@ -19,6 +19,7 @@ variable "vlans" {
   type = map(object({
     name    = string
     vlan_id = number
+    address = string
   }))
   default = {}
 }
