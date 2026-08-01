@@ -175,3 +175,55 @@ variable "dhcp_static_leases" {
 }
 
 # }}}
+
+# 1Password / RouterOS credentials {{{
+
+variable "op_vault" {
+  type        = string
+  description = "1Password vault name or UUID for shared credentials"
+}
+
+variable "op_item_routeros" {
+  type        = string
+  description = "1Password item title containing RouterOS admin credentials (url, username, password)"
+}
+
+variable "routeros_insecure" {
+  type        = bool
+  nullable    = true
+  default     = true
+  description = "Whether to skip TLS certificate verification when connecting to the MikroTik device"
+}
+
+variable "bootstrap" {
+  type        = bool
+  default     = false
+  description = "Connect using RouterOS factory-default credentials (admin / blank password) over plain HTTP instead of 1Password. Use only for the first apply against a freshly reset device, before its admin password has been set to match the 1Password item."
+}
+
+variable "routeros_endpoint" {
+  type        = string
+  nullable    = true
+  default     = null
+  description = "Bare host/IP of the MikroTik device. Only used when bootstrap = true."
+}
+
+variable "routeros_groups" {
+  type = map(object({
+    policies = list(string)
+  }))
+  description = "RouterOS user groups and their policies"
+}
+
+variable "routeros_users" {
+  type = map(object({
+    group         = optional(string, "full")
+    comment       = optional(string)
+    disabled      = optional(bool, false)
+    ssh_keys      = optional(list(string), [])
+    password_item = optional(string)
+  }))
+  description = "RouterOS local users, keyed by username. password_item, when set, is a 1Password item title (in op_vault) whose password is applied to this user; when unset (null), the user is created/updated but its password is left alone (never set, never overwritten) — e.g. admin, unless/until it has its own 1Password item to point at."
+}
+
+# }}}
