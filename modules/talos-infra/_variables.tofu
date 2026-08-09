@@ -1,9 +1,3 @@
-variable "cluster_name" {
-  type        = string
-  description = "Name of the Talos cluster"
-  default     = "talos-cluster"
-}
-
 variable "op_vault" {
   type        = string
   description = "1Password vault name or UUID for shared credentials"
@@ -94,12 +88,6 @@ variable "talos_version" {
   type        = string
   description = "Talos Linux version"
   default     = "v1.12.2"
-}
-
-variable "kubernetes_version" {
-  type        = string
-  description = "Kubernetes version"
-  default     = "1.32.0"
 }
 
 variable "talos_image_datastore" {

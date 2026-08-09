@@ -91,5 +91,11 @@ jobs:
       - name: Lint module
         working-directory: modules/${{ matrix.name }}
         run: |
+          set -euo pipefail
+          # tflint doesn't recognize the .tofu extension, so symlink to .tf
+          # so it actually parses this module's content instead of finding nothing.
+          for f in *.tofu; do
+            ln -s "$f" "${f%.tofu}.tf"
+          done
           nix develop -c tflint --init
           nix develop -c tflint

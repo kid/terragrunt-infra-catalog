@@ -14,9 +14,9 @@ terraform {
       source  = "ivoronin/macaddress"
       version = "0.3.2"
     }
-    sops = {
-      source  = "carlpett/sops"
-      version = "1.3.0"
+    onepassword = {
+      source  = "1Password/onepassword"
+      version = "3.3.1"
     }
   }
 }
