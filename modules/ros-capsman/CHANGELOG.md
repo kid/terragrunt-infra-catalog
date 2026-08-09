@@ -1,3 +1,5 @@
+## [1.1.3](https://github.com/kid/terragrunt-infra-catalog/compare/ros-capsman%2Fv1.1.2...ros-capsman%2Fv1.1.3) (2026-08-09)
+
 ## [1.1.2](https://github.com/kid/terragrunt-infra-catalog/compare/ros-capsman%2Fv1.1.1...ros-capsman%2Fv1.1.2) (2026-07-26)
 
 ## [1.1.1](https://github.com/kid/terragrunt-infra-catalog/compare/ros-capsman-v1.1.0...ros-capsman-v1.1.1) (2026-02-16)
