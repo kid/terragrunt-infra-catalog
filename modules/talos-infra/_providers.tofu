@@ -14,7 +14,7 @@ provider "proxmox" {
   endpoint = data.onepassword_item.proxmox.url
   username = "${data.onepassword_item.proxmox.username}@pam"
   password = data.onepassword_item.proxmox.password
-  insecure = false
+  insecure = var.proxmox_insecure
 }
 
 provider "routeros" {
