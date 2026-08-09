@@ -175,7 +175,7 @@ resource "routeros_wifi_configuration" "capxr1-5g" {
   }
 
   security = {
-    config = "wpa2"
+    config = routeros_wifi_security.wpa2.name
   }
 
   steering = {
