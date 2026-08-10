@@ -19,19 +19,15 @@ resource "routeros_routing_bgp_connection" "bgp" {
   name      = "${var.cluster_name}-${each.key}"
   as        = var.bgp_local_asn
   instance  = routeros_routing_bgp_instance.bgp.name
-  templates = [routeros_routing_bgp_template.bgp.name]
-  connect   = true
-  listen    = true
+  templates = routeros_routing_bgp_template.bgp.name
+  connect   = "true"
+  listen    = "true"
 
-  address_families = "ip"
-  routing_table    = "main"
+  afi           = "ip"
+  routing_table = "main"
 
-  local {
-    role = "ebgp"
-  }
+  local_role = "ebgp"
 
-  remote {
-    address = each.value.ip_address
-    as      = var.bgp_remote_asn
-  }
+  remote_address = each.value.ip_address
+  remote_as      = var.bgp_remote_asn
 }
