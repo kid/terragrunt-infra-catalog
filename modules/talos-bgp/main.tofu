@@ -9,8 +9,8 @@ resource "routeros_routing_bgp_template" "talos" {
   name           = "${var.cluster_name}-peers"
   as             = var.bgp_local_asn
   routing_table  = "main"
-  hold_time      = "1m30s"
-  keepalive_time = "30s"
+  hold_time      = var.bgp_hold_time
+  keepalive_time = var.bgp_keepalive_time
 }
 
 resource "routeros_routing_bgp_connection" "talos" {
