@@ -1,7 +1,7 @@
 variable "cluster_name" {
   type        = string
-  description = "Name of the Talos cluster"
-  default     = "talos-cluster"
+  description = "Name of the cluster whose nodes this instance BGP-peers with"
+  default     = "cluster"
 }
 
 variable "op_vault" {
@@ -25,7 +25,7 @@ variable "nodes" {
   type = map(object({
     ip_address = string
   }))
-  description = "Map of Talos BGP peers keyed by peer name"
+  description = "Map of BGP peers keyed by peer name"
 }
 
 variable "bgp_local_asn" {
@@ -36,7 +36,7 @@ variable "bgp_local_asn" {
 
 variable "bgp_remote_asn" {
   type        = number
-  description = "Remote ASN for the Talos/Cilium BGP peers"
+  description = "Remote ASN shared by all entries in var.nodes"
   default     = 64513
 }
 
@@ -54,6 +54,6 @@ variable "bgp_keepalive_time" {
 
 variable "bgp_router_id" {
   type        = string
-  description = "Router ID for BGP instance (typically router IP on the Talos VLAN)"
+  description = "Router ID for BGP instance (typically router IP on the peered VLAN)"
   default     = null
 }
