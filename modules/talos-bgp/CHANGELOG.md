@@ -1,3 +1,5 @@
+## [1.2.0](https://github.com/kid/terragrunt-infra-catalog/compare/talos-bgp%2Fv1.1.0...talos-bgp%2Fv1.2.0) (2026-08-10)
+
 ## [1.1.0](https://github.com/kid/terragrunt-infra-catalog/compare/talos-bgp-v1.0.0...talos-bgp-v1.1.0) (2026-03-17)
 
 
