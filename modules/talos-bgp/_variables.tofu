@@ -40,6 +40,18 @@ variable "bgp_remote_asn" {
   default     = 64513
 }
 
+variable "bgp_hold_time" {
+  type        = string
+  description = "BGP hold time for the peer template"
+  default     = "1m30s"
+}
+
+variable "bgp_keepalive_time" {
+  type        = string
+  description = "BGP keepalive time for the peer template"
+  default     = "30s"
+}
+
 variable "bgp_router_id" {
   type        = string
   description = "Router ID for BGP instance (typically router IP on the Talos VLAN)"
