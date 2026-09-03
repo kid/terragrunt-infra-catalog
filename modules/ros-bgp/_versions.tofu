@@ -16,7 +16,7 @@ terraform {
     # registry.terraform.io host needed, since this repo uses OpenTofu.
     routeros = {
       source  = "registry.terraform.io/ebogdum/routeros"
-      version = "~> 3.0"
+      version = "~> 4.0"
     }
     onepassword = {
       source  = "1Password/onepassword"
