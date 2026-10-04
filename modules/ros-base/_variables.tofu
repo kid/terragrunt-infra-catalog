@@ -98,8 +98,8 @@ variable "ethernet_interfaces" {
     name            = optional(string, "")
     comment         = optional(string, "")
     bridge_port     = optional(bool, true)
-    mtu             = optional(number, 1500)
-    l2mtu           = optional(number, 1518)
+    mtu             = optional(number)
+    l2mtu           = optional(number)
     interface_lists = optional(list(string), [])
 
     # VLAN configuration
