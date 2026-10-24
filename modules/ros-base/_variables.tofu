@@ -107,7 +107,7 @@ variable "ethernet_interfaces" {
     untagged = optional(number)
   }))
   default     = {}
-  description = "Map of ethernet interfaces to configure"
+  description = "Map of ethernet interfaces to configure. Bridge ports without an explicit l2mtu get the port's max-l2mtu."
 }
 
 # }}}
