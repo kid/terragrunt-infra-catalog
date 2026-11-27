@@ -40,9 +40,3 @@ resource "routeros_system_user_sshkeys" "users_keys" {
   user = routeros_system_user.users[each.value.user].name
   key  = each.value.key
 }
-
-import {
-  for_each = setintersection(local.usernames, ["admin"])
-  to       = routeros_system_user.users[each.key]
-  id       = "name=admin"
-}
