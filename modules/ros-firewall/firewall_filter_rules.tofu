@@ -19,6 +19,7 @@ locals {
         in_interface = vlan.name
       }
     ],
+    var.input_rules,
   )
 
   forward_rules = concat(
