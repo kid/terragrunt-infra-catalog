@@ -60,6 +60,22 @@ variable "vlans_forward_rules" {
   default = {}
 }
 
+variable "input_rules" {
+  type = list(object({
+    comment           = string
+    action            = string
+    disabled          = optional(bool)
+    protocol          = optional(string)
+    in_interface      = optional(string)
+    in_interface_list = optional(string)
+    src_address       = optional(string)
+    dst_address       = optional(string)
+    dst_port          = optional(string)
+  }))
+  default     = []
+  description = "Extra rules for the top-level input chain, after the per-VLAN jumps"
+}
+
 # }}}
 
 variable "op_vault" {
