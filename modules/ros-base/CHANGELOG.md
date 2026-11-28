@@ -1,3 +1,5 @@
+## [3.0.0](https://github.com/kid/terragrunt-infra-catalog/compare/ros-base%2Fv2.2.0...ros-base%2Fv3.0.0) (2026-11-28)
+
 ## [2.2.0](https://github.com/kid/terragrunt-infra-catalog/compare/ros-base%2Fv2.1.0...ros-base%2Fv2.2.0) (2026-10-24)
 
 ## [2.1.0](https://github.com/kid/terragrunt-infra-catalog/compare/ros-base%2Fv2.0.0...ros-base%2Fv2.1.0) (2026-10-04)
