@@ -1,3 +1,5 @@
+## [2.0.1](https://github.com/kid/terragrunt-infra-catalog/compare/ros-bgp%2Fv2.0.0...ros-bgp%2Fv2.0.1) (2026-11-28)
+
 ## [2.0.0](https://github.com/kid/terragrunt-infra-catalog/compare/ros-bgp%2Fv1.0.0...ros-bgp%2Fv2.0.0) (2026-08-10)
 
 ## 1.0.0 (2026-08-10)
