@@ -14,6 +14,13 @@ resource "routeros_system_user_group" "groups" {
   policy   = each.value.policies
 }
 
+# A device's built-in admin user already exists, so a caller managing
+# routeros_users["admin"] adopts it with an import block in its own root
+# module (OpenTofu allows them nowhere else):
+#   import {
+#     to = module.<name>.routeros_system_user.users["admin"]
+#     id = "name=admin"
+#   }
 resource "routeros_system_user" "users" {
   depends_on = [routeros_system_user_group.groups]
   for_each   = local.usernames
@@ -39,10 +46,4 @@ resource "routeros_system_user_sshkeys" "users_keys" {
 
   user = routeros_system_user.users[each.value.user].name
   key  = each.value.key
-}
-
-import {
-  for_each = setintersection(local.usernames, ["admin"])
-  to       = routeros_system_user.users[each.key]
-  id       = "name=admin"
 }
